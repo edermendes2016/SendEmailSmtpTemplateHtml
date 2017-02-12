@@ -3,6 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
+    public class SendEmailViewModel
+    {
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "E-Mail")]
+        public string Email { get; set; }
+    }
+
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]

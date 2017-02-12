@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -20,6 +22,25 @@ namespace WebApplication1.Controllers
 
         public AccountController()
         {
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult SendEmail()
+        {
+            return View();
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendEmail(SendEmailViewModel model)
+        {
+            var mesage = await EmailTemplate("WelcomeEmail");
+            mesage = mesage.Replace("ViewBag.Name", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(model.FirstName));
+            await MessageServices.SendEmailAsync(model.Email, "Welcome!", mesage);
+            return View("EmailSent");
+        }
+        public ActionResult EmailSent()
+        {
+            return View();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -282,6 +303,16 @@ namespace WebApplication1.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
+
+        public static async Task<string> EmailTemplate(string template)
+        {
+            var templateFilePath = HostingEnvironment.MapPath("~/Content/templates") + template + ".cshtml";
+            StreamReader objStreamReaderFile = new StreamReader(templateFilePath);
+            var body = await objStreamReaderFile.ReadToEndAsync();
+            objStreamReaderFile.Close();
+            return body;
+        }
+
         //
         // GET: /Account/SendCode
         [AllowAnonymous]
@@ -482,4 +513,5 @@ namespace WebApplication1.Controllers
         }
         #endregion
     }
+
 }
