@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "E-Mail")]
-        public string Email { get; set; }
+        public string Email2 { get; set; }
     }
 
 

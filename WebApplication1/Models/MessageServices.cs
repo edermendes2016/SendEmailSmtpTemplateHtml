@@ -12,8 +12,8 @@ namespace WebApplication1.Models
         public async static Task SendEmailAsync(string email, string subject, string message)
         {
            
-                var _email = "YourEmail@hotmail.com";
-                var _epass = ConfigurationManager.AppSettings["EmailPassword"];
+                var _email = "YourEmail@gmail.com";
+                var _epass = ConfigurationManager.AppSettings["YourPW"];
                 var _displayName = "YourName";
                 MailMessage myMessage = new MailMessage();
                 myMessage.To.Add(email);
@@ -25,7 +25,7 @@ namespace WebApplication1.Models
                 using (SmtpClient smtp = new SmtpClient())
                 {
                     smtp.EnableSsl = true;
-                    smtp.Host = "smtp.live.com";
+                    smtp.Host = "smtp.gmail.com";
                     smtp.Port = 587;
                     smtp.UseDefaultCredentials = false;
                     smtp.Credentials = new NetworkCredential(_email, _epass);
